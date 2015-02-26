@@ -1,0 +1,35 @@
+
+
+2/1/15
+
+I really struggled to go from CBSA to Lat Long. I ended up creating a sqlite db that's also in this directory to cross lat long from census, found here:
+http://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?src=bkmk
+
+Thanks to advice here:
+http://opendata.stackexchange.com/questions/1453/trying-to-locate-us-census-shapefiles-for-all-msas-metropolitan-micropolitan
+
+So not sure this was the best way, but we'll see.
+
+
+2/8: Important discovery: the download I got from Census API “employment.csv” contains summary info (firm size “m”: all categories) as well as the categorical data - so the numbers are 2x as big as they should be.
+
+Used this query to just get raw totals: SELECT msa, year2, sum(firms), sum(job_creation_births), sum(job_creation_continuers), sum(job_destruction) FROM employment WHERE fsize = "m" GROUP BY year2, msa
+
+Which matches up more or less with what’s in the data tables online here: http://www.census.gov/ces/dataproducts/bds/data_firm.html
+
+Query to join lat/long and city,state info to q-result-jobs-by-msa-by-year.csv
+
+SELECT jobsMsaYr.msa, jobsMsaYr.year, jobsMsaYr.firms, jobsMsaYr.job_births, jobsMsaYr.job_continues, jobsMsaYr.job_destruction, crosswalk.city, crosswalk.state, crosswalk.lat, crosswalk.long FROM jobsMsaYr LEFT OUTER JOIN crosswalk ON crosswalk.cbsa = jobsMsaYr.msa GROUP BY jobsMsaYr.year, jobsMsaYr.msa ORDER BY jobsMsaYr.msa
+
+
+
+SELECT citylatlon.city, result.cbsa, result.year2, result.firms, result.job_creation_births, result.job_creation_continuers, result.job_destruction, citylatlon.lat, citylatlon.lon FROM result LEFT JOIN citylatlon ON result.state = citylatlon.state AND result.city = citylatlon.city
+
+
+test-missing-stuff.csv is probably not very accurate. Some tables have states abbreviated, others spelled out. So there are a billion steps to getting the lat-lon into the data (even tho i finally have a nice list of lat-lon). Just trying to get something on the map for now. PS - I discovered today all my lat lone were missing decimals.
+
+This is where my cities came from: https://gist.github.com/ecarter/413343
+
+
+
+
