@@ -3,3 +3,5 @@ joinedResult is a join of jobsMSAyear.csv, cityLatLon.csv, msaCityName.csv on ci
 The cityLatLon thing came from: https://gist.github.com/ecarter/413343
 Has ~250 cities.
 
+This may be a better list for lat/lon of cities: http://www.realestate3d.com/gps/latlong.htm
+

@@ -2,40 +2,82 @@
 var dataset;
 
 var DEFAULT = {
-  yearChoice: "2012",
+  yearChoice: "1987",
   category: "job_destruction"
 }
-
-var yearChoice = DEFAULT.yearChoice;
-var category = DEFAULT.category;
-
 
 d3.selectAll(".cat-choice").on("click", function(){
   var clicked = d3.select(this);
   category = clicked.attr("data-cat");
-  makeMap(category);
+
+  makeMap(category, year);
 })
 
-window.onload = makeMap(category);
+var year = year || DEFAULT.yearChoice,
+    category = category || DEFAULT.category;
 
-var w = 900;
-var h = 700;
+
+window.onload = makeMap(DEFAULT.category, DEFAULT.yearChoice);
+
+setUpInteractions();
+
+function setUpInteractions(){
+  var slideEventDispatcher = makeSlider();
+
+
+    slideEventDispatcher.on("slideEnd", function(value){
+      var year = Math.round(value);
+
+
+      if (year > 1976 && year < 1980) { // 77-79
+        year = "1977";
+      } else if (year > 1979 && year < 1985){ // 80-84
+        year = "1982";
+      } else if (year > 1984 && year < 1990){ // 85-89
+        year = "1987"
+      } else if (year > 1989 && year < 1995) { // 90-94
+        year = "1992"
+      } else if (year > 1994 && year < 2000) { // 95-99
+        year = "1997"
+      } else if (year > 1999 && year < 2005) { // 00-04
+        year = "2002"
+      } else if (year > 2004 && year < 2010) { // 05-09
+        year = "2007"
+      } else {
+        year = "2012"
+      }
+
+
+      makeMap(category, year)
+    })
+}
+
+
+var w = 960;
+var h = 650;
 
 var projection = d3.geo.albersUsa()
              .translate([w/2, h/2])
-             .scale([900]);
+             .scale([1200]);
 
 var path = d3.geo.path()
          .projection(projection);
 
-var svg = d3.select("body")
+var svg = d3.select("#graph")
       .append("svg")
       .attr("width", w)
       .attr("height", h);
 
 
-function makeMap(){
-  d3.csv("../data/data2/joinedResult.csv", function (data){
+function makeMap(category, year){
+  d3.csv("../data/data3/bdsDataGeocoded.csv", function (data){
+
+    var sizeNester = d3.nest()
+                .key(function (d){
+                  return d.fsize
+                })
+
+
 
     var yearNester = d3.nest()
                 .key(function (d) {
@@ -45,7 +87,7 @@ function makeMap(){
       dataset = yearNester.map(data, d3.map);
 
 
-      jobs2012 = dataset.get(yearChoice);
+      jobsDataset = dataset.get(year);
 
       d3.json("../data/us-states.json", function(json) {
 
@@ -66,7 +108,7 @@ function makeMap(){
                  .attr("stroke", "#fff");
 
               var update = svg.selectAll("circle")
-                            .data(jobs2012)
+                            .data(jobsDataset)
 
               var enter = update.enter()
                             .append("circle")
@@ -78,19 +120,9 @@ function makeMap(){
               }
 
               update.transition()
-                 .attr("cx", function(d) { if (d.lon) {
-                         return projection([d.lon, d.lat])[0];
-                        } else {
-                          return -1000
-                        }
-                 })
-                 .attr("cy", function(d) { if (d.lon) {
-                         return projection([d.lon, d.lat])[1];
-                        } else {
-                          return -1000
-                        }
-                 })
-                  .attr("r", function(d){ return d[category]/ 10000})
+                  .attr("cx", function(d){ return projection([d.lon, d.lat])[0]})
+                  .attr("cy", function(d){ return projection([d.lon, d.lat])[1]})
+                  .attr("r", function(d){ return d[category]/ 2000})
                   .style("fill", colorCircles)
                   .style("opacity", 0.3)
 
@@ -98,19 +130,9 @@ function makeMap(){
                 update.enter()
                   .append("text")
                     .style("stroke", "#000")
-                    .attr("x", function(d) {
-                      if (d.lon) {
-                           return projection([d.lon, d.lat])[0];
-                          } else {
-                            return -1000
-                          }
-                   })
-                   .attr("y", function(d) { if (d.lon) {
-                           return projection([d.lon, d.lat])[1];
-                          } else {
-                            return -1000
-                          }
-                   })
+                    .attr("x", function(d){ return projection([d.lon, d.lat])[0]})
+                    .attr("y", function(d){ return projection([d.lon, d.lat])[1]})
+
                     .text(function(d, i){ return d.city })
                     .attr("class", "city-name")
                     .on("mouseover", function(){ d3.select(this).style("opacity", "1")})
@@ -122,6 +144,7 @@ function makeMap(){
       });
   });
 }
+
 
 
 

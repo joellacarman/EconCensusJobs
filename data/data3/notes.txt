@@ -1,0 +1,9 @@
+
+File CBD_geocodes_for_US_MSAs.xls downloaded from: http://mattholian.blogspot.com/2013/05/central-business-district-geocodes.html
+
+Tk u!
+
+
+created geocodedBdsData:
+SELECT bdsDownload.firms, bdsDownload.fsize, bdsDownload.fage4, bdsDownload.jobCreationBirths, bdsDownload.jobCreationContinuers, bdsDownload.jobDestruction, bdsDownload.year2, geocode.PrincipleCity, geocode.Lat, geocode.Lon FROM bdsDownload LEFT OUTER JOIN geocode ON bdsDownload.msa = geocode.CBSAcode ORDER BY geocode.PrincipleCity
+
