@@ -1,8 +1,8 @@
 
 function makeSlider(){
   var margin = {top: 20, right: 50, bottom: 20, left: 50},
-      width = 960 - margin.left - margin.right,
-      height = 100 - margin.bottom - margin.top;
+      width = 600 - margin.left - margin.right,
+      height = 70 - margin.bottom - margin.top;
 
   var dispatcher = d3.dispatch("slideEnd");
 

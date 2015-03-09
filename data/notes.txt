@@ -1,0 +1,20 @@
+
+File CBD_geocodes_for_US_MSAs.xls downloaded from: http://mattholian.blogspot.com/2013/05/central-business-district-geocodes.html
+
+Tk u!
+
+
+created geocodedBdsData:
+
+SELECT bdsDownload.firms, bdsDownload.fsize, bdsDownload.fage4, bdsDownload.jobCreationBirths, bdsDownload.jobCreationContinuers, bdsDownload.jobDestruction, bdsDownload.year2, geocode.PrincipleCity, geocode.Lat, geocode.Lon FROM bdsDownload LEFT OUTER JOIN geocode ON bdsDownload.msa = geocode.CBSAcode WHERE bdsDownload.fage4 = "m" ORDER BY geocode.PrincipleCity
+
+It's slow bc each city appears 8-10 times, one for each of those a-m variables under fage & fsize.
+-> need to nest so the bound dataset is smaller
+
+
+d3.nest()
+  .key(function(d) { return d.year; })
+  .rollup(function(values) { return d3.sum(values, function(d) {return +d.new; }) })
+  .key(function(d) { return d.city; })
+  .rollup(function(values) { return d3.sum(values, function(d) {return +d.new; }) })
+  .map(data);

@@ -1,6 +1,23 @@
 body {
   background-color: #7C8882;
-  font-family: Helvetica;
+  font-family: "Open sans", sans-serif;
+}
+
+.cat-choice {
+  margin-top: 25px;
+}
+
+#slider {
+  height: 80px;
+  width: 600px;
+}
+
+#graph {
+  margin-top: -15px;
+}
+
+h1 {
+  text-align: center;
 }
 
 .city-name {
@@ -9,10 +26,8 @@ body {
 
 .my-container {
   margin: 0 auto;
-  width: 960px;
+  width: 1000px;
 }
-
-
 
 .axis {
   font: 10px sans-serif;
@@ -42,4 +57,9 @@ body {
   stroke-opacity: .5;
   stroke-width: 1.25px;
   cursor: crosshair;
+}
+
+#slider {
+  display: inline;
+  float: left;
 }
