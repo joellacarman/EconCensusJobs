@@ -1,10 +1,10 @@
 
 var w = 960;
-var h = 650;
+var h = 470;
 
 var projection = d3.geo.albersUsa()
              .translate([w/2, h/2])
-             .scale([1200]);
+             .scale([1000]);
 
 var path = d3.geo.path()
          .projection(projection);
@@ -26,6 +26,8 @@ function makeGrayMap(json){
 
 function drawCircles(category, year, data){
 
+  data = yearNester.map(data, d3.map);
+
   var jobsDataset = data.get(year).entries();
 
   var circleColors = {
@@ -43,7 +45,7 @@ function drawCircles(category, year, data){
   update.transition()
       .attr("cx", function(d){ return projection([d.value.lon, d.value.lat])[0]})
       .attr("cy", function(d){ return projection([d.value.lon, d.value.lat])[1]})
-      .attr("r", function(d){ return d.value.jobsNums/ 5000})
+      .attr("r", function(d){ return d.value.jobsNums/ 7000})
       .style("fill", circleColors[category])
       .style("opacity", 0.3)
 
@@ -52,7 +54,7 @@ function drawCircles(category, year, data){
       .style("stroke", "#000")
       .attr("x", function(d){ return projection([d.value.lon, d.value.lat])[0]})
       .attr("y", function(d){ return projection([d.value.lon, d.value.lat])[1]})
-
+      .attr("text-anchor", "middle")
       .text(function(d){ return d.key })
       .attr("class", "city-name")
       .on("mouseover", function(){ d3.select(this).style("opacity", "1")})

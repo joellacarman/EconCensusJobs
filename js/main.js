@@ -56,9 +56,7 @@ function getJobsData(){
     })
 
   return promise
-    .then(function(data){
-      return yearNester.map(data, d3.map);
-    })
+
 }
 
 function getTopoJsonData(){
@@ -73,7 +71,7 @@ function getTopoJsonData(){
 }
 
 function setUpInteractions(data){
-  var jobsData = data[0];
+  var jobsData = data[0]
   var slideEventDispatcher = makeSlider();
 
     slideEventDispatcher.on("slideEnd", function(value){
@@ -81,9 +79,13 @@ function setUpInteractions(data){
       drawCircles(category, year, jobsData)
     })
 
-  d3.selectAll(".cat-choice").on("click", function(){
+var catButtons = d3.selectAll(".cat-choice").on("click", function(){
     var clicked = d3.select(this);
     category = clicked.attr("data-cat");
+
+    catButtons.classed("active", false);
+    clicked.classed("active", true);
+
     drawCircles(category, year, jobsData);
   })
 }

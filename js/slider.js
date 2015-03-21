@@ -1,7 +1,7 @@
 
 function makeSlider(){
   var margin = {top: 20, right: 50, bottom: 20, left: 50},
-      width = 600 - margin.left - margin.right,
+      width = 500 - margin.left - margin.right,
       height = 70 - margin.bottom - margin.top;
 
   var dispatcher = d3.dispatch("slideEnd");
@@ -10,6 +10,8 @@ function makeSlider(){
       .domain([1977, 2012])
       .range([0, width])
       .clamp(true);
+
+  var ticks = [1977, 1982, 1987, 1992, 1997, 2002, 2007, 2012];
 
   var brush = d3.svg.brush()
       .x(x)
@@ -27,6 +29,7 @@ function makeSlider(){
       .attr("transform", "translate(0," + height / 2 + ")")
       .call(d3.svg.axis()
         .scale(x)
+        .tickValues(ticks)
         .orient("bottom")
         .tickFormat(function(d) { return d; })
         .tickSize(0)

@@ -1,6 +1,15 @@
+button.active {
+  border: 1px solid #000;
+}
+
 body {
   background-color: #7C8882;
-  font-family: "Open sans", sans-serif;
+  font-family: "Lato", sans-serif;
+}
+
+button {
+  border: 1px solid #fff;
+  border-radius: 3px;
 }
 
 .cat-choice {
@@ -8,8 +17,8 @@ body {
 }
 
 #slider {
-  height: 80px;
-  width: 600px;
+  height: 90px;
+  width: 500px;
 }
 
 #graph {
